@@ -204,7 +204,7 @@ if __name__ == '__main__':
     fig = plt.figure()
     
     for key in test_dict.keys():
-        i = 0
+        i = 1
         print(test_dict[key].img_hsv.shape) 
         X = test_dict[key].img_hsv.reshape(-1,2) #dividing by 2
         Y = centroid.reshape(-1,2)
@@ -216,9 +216,11 @@ if __name__ == '__main__':
         #plot histograms
         density, edges = np.histogram(image_histogram[key] , bins=k, density=True)
         ax = fig.add_subplot(num_images/2, num_images/2, i )
-        aax.hist(np.ndarray.flatten(image_histogram[key]), bins = 64)
-        ax.set_tit
+        ax.hist(np.ndarray.flatten(image_histogram[key]), bins = 64)
+        ax.set_title(key)
         
+        i = i + 1
+
     #3D HSV plot
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')

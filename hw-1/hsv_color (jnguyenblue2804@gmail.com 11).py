@@ -199,26 +199,35 @@ if __name__ == '__main__':
     #pr.enable()
     
     image_histogram = {}
-    test_dict = hsv_model.image_dict['cloud']
+    #test_dict = hsv_model.image_dict['cloud']
+    test_dict = hsv_model.image_dict
     
-    fig = plt.figure()
+    #fig, axes = plt.subplots(num_images, num_images, figsize=(10, 10))
+    fig_num = 1
     
-    for key in test_dict.keys():
-        i = 0
-        print(test_dict[key].img_hsv.shape) 
-        X = test_dict[key].img_hsv.reshape(-1,2) #dividing by 2
-        Y = centroid.reshape(-1,2)
-        #Y is the centroid and X is the trainingdataset track the minimum distance and the index
-        #https://stackoverflow.com/questions/10818546/finding-index-of-nearest-point-in-numpy-arrays-of-x-and-y-coordinates
-        min_dists, min_dist_idx = scipy.spatial.cKDTree(Y).query(X, 1)
-        image_histogram[key] = Y[min_dist_idx].reshape(-1,3) #I need to map this index to the actual histogram value from the centroid value
-        
-        #plot histograms
-        density, edges = np.histogram(image_histogram[key] , bins=k, density=True)
-        ax = fig.add_subplot(num_images/2, num_images/2, i )
-        aax.hist(np.ndarray.flatten(image_histogram[key]), bins = 64)
-        ax.set_tit
-        
+    #histogram plots for number 2
+    for outer_key in test_dict.keys():
+        fig = plt.figure(fig_num)
+        fig_num +=1
+        i = 1    
+        for key in test_dict[outer_key]:
+            #print(test_dict[key].img_hsv.shape) 
+            X = test_dict[outer_key][key].img_hsv.reshape(-1,2) #dividing by 2
+            Y = centroid.reshape(-1,2)
+            #Y is the centroid and X is the trainingdataset track the minimum distance and the index
+            #https://stackoverflow.com/questions/10818546/finding-index-of-nearest-point-in-numpy-arrays-of-x-and-y-coordinates
+            min_dists, min_dist_idx = scipy.spatial.cKDTree(Y).query(X, 1)
+            image_histogram[key] = Y[min_dist_idx].reshape(-1,3) #I need to map this index to the actual histogram value from the centroid value
+    
+            #plot histograms
+            ax = fig.add_subplot(2, 2,  i )
+            ax.hist(np.ndarray.flatten(image_histogram[key]), bins = k)
+            ax.set_title(key)
+            i +=1
+    
+    plt.tight_layout()
+    plt.show()
+
     #3D HSV plot
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
